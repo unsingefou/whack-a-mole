@@ -1,0 +1,12 @@
+body {
+  text-align: center;
+}
+
+img {
+  display: none;
+}
+button {
+  border: 1px solid black;
+  padding: 1em;
+  font-size: 15px;
+}

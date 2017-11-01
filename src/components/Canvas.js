@@ -1,4 +1,5 @@
 import Hole from 'components/Hole.js'
+import {PLAY} from 'Constants.js'
 
 function Canvas() {
   this.canvas = document.getElementById("canvas")
@@ -21,7 +22,8 @@ Canvas.prototype.init = function () {
   this.score = 0
 }
 
-Canvas.prototype.update = function (timer){
+Canvas.prototype.update = function (timer, state){
+  this.state = state
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
   this.ctx.fillStyle = this.color
   this.ctx.fillRect(0, 0, canvas.width, canvas.height)

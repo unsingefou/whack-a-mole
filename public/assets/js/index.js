@@ -70,21 +70,33 @@
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Game_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_Constants_js__ = __webpack_require__(7);
+
 
 
 document.addEventListener( 'DOMContentLoaded', function () {
   var game = new __WEBPACK_IMPORTED_MODULE_0__Game_js__["a" /* default */]()
 
   document.getElementById('start').addEventListener('click', function() {
-    game.setPlaying(true)
+    if(game.getState() === __WEBPACK_IMPORTED_MODULE_1_Constants_js__["c" /* PAUSE */]) {
+      game.setState(__WEBPACK_IMPORTED_MODULE_1_Constants_js__["d" /* PLAY */])
+    } else if(game.getState() === __WEBPACK_IMPORTED_MODULE_1_Constants_js__["b" /* MENU */]) {
+      game.setState(__WEBPACK_IMPORTED_MODULE_1_Constants_js__["d" /* PLAY */])
+    } else if(game.getState() === __WEBPACK_IMPORTED_MODULE_1_Constants_js__["e" /* SCORE */]) {
+      game.reset()
+    }
   }, false)
 
   document.getElementById('stop').addEventListener('click', function() {
-    game.setPlaying(false)
+    if(game.getState() === __WEBPACK_IMPORTED_MODULE_1_Constants_js__["d" /* PLAY */]) {
+      game.setState(__WEBPACK_IMPORTED_MODULE_1_Constants_js__["c" /* PAUSE */])
+    }
   }, false)
 
   document.getElementById('reset').addEventListener('click', function() {
-    console.log("reset")
+    if(game.getState() !== __WEBPACK_IMPORTED_MODULE_1_Constants_js__["b" /* MENU */]) {
+      game.reset()
+    }
   }, false)
 
 }, false )
@@ -96,29 +108,53 @@ document.addEventListener( 'DOMContentLoaded', function () {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_components_Canvas_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_Constants_js__ = __webpack_require__(7);
+
 
 
 function Game() {
   this.canvas = new __WEBPACK_IMPORTED_MODULE_0_components_Canvas_js__["a" /* default */]()
-  this.score = 0
-  this.isMouseDown = false
-  this.playing = false
+  this.state = __WEBPACK_IMPORTED_MODULE_1_Constants_js__["b" /* MENU */]
+  this.timer = 10000
+  this.interval = 50
+  this.init()
 }
 
 Game.prototype.init = function () {
-  
+  this.update()
+}
+Game.prototype.reset = function() {
+  this.setState(__WEBPACK_IMPORTED_MODULE_1_Constants_js__["d" /* PLAY */])
+  this.canvas.init()
+  this.timer = 10000
+  this.score = 0
 }
 
 Game.prototype.update = function () {
-  if(this.playing) {
-    this.canvas.update()
-    setTimeout(this.update.bind(this), 50)
+  if(this.state === __WEBPACK_IMPORTED_MODULE_1_Constants_js__["b" /* MENU */]) {
+    this.canvas.renderMenu()
+  } else if(this.state === __WEBPACK_IMPORTED_MODULE_1_Constants_js__["d" /* PLAY */]) {
+    if(this.timer > 0) {
+      if(this.state === __WEBPACK_IMPORTED_MODULE_1_Constants_js__["d" /* PLAY */] ) {
+        this.canvas.update(this.timer)
+        this.timer -= this.interval
+      }
+    } else {
+      this.setState(__WEBPACK_IMPORTED_MODULE_1_Constants_js__["e" /* SCORE */])
+    }
   }
+  if(this.state === __WEBPACK_IMPORTED_MODULE_1_Constants_js__["e" /* SCORE */]) {
+    this.canvas.renderScore()
+  }
+
+  setTimeout(this.update.bind(this), this.interval)
 }
 
-Game.prototype.setPlaying = function (val) {
-  this.playing = val
-  this.update()
+Game.prototype.setState = function (state) {
+  this.state = state
+}
+Game.prototype.getState = function () {
+  return this.state
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Game);
@@ -139,13 +175,31 @@ function Canvas() {
   this.ctx = this.canvas.getContext("2d")
   this.canvas.onmouseup = this.mouseUp.bind(this)
   this.updateScore = this.updateScore.bind(this)
+  this.holes = []
+  this.score = 0
+  this.fontColor = '#ffffff'
+  this.color = '#00a96d'
+  this.menu = document.getElementById('menu')
+  this.scoreMenu = document.getElementById('score')
+  this.init()
+}
+
+Canvas.prototype.init = function () {
+  this.ctx.font = "30px Arial"
+  this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
   this.holes = initHoles(this.canvas, this.ctx, this.updateScore)
   this.score = 0
 }
 
-Canvas.prototype.update = function (){
+Canvas.prototype.update = function (timer){
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+  this.ctx.fillStyle = this.color
+  this.ctx.fillRect(0, 0, canvas.width, canvas.height)
   updateHoles(this.holes)
+  this.ctx.fillStyle = this.fontColor
+  this.ctx.fillText("Time: " + Math.ceil(timer/1000), 10, 50)
+  this.ctx.fillStyle = this.fontColor
+  this.ctx.fillText("Score: " + this.score, this.canvas.width - 200, 50)
 }
 
 Canvas.prototype.mouseUp = function(e) {
@@ -154,13 +208,30 @@ Canvas.prototype.mouseUp = function(e) {
 
 Canvas.prototype.updateScore = function(value) {
   this.score += value
-  console.log(this.score);
+}
+
+Canvas.prototype.renderMenu = function() {
+  this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+  this.ctx.drawImage(this.menu, 0, 0, this.canvas.width, this.canvas.height)
+}
+
+Canvas.prototype.renderScore = function() {
+  this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+  this.ctx.drawImage(this.scoreMenu, 0, 0, this.canvas.width, this.canvas.height)
+  this.ctx.fillStyle = this.fontColor
+  this.ctx.fillText("Score: " + this.score, this.canvas.width * 0.5 - 50, this.canvas.height * 0.25)
 }
 
 function initHoles(canvas, context, onHit) {
   var holes = []
-  for (var i = 0; i<1; i++) {
-    holes.push(new __WEBPACK_IMPORTED_MODULE_1_components_Hole_js__["a" /* default */](canvas.width * 0.5, canvas.height * 0.5, canvas.width * 0.5, canvas.height * 0.5, context, onHit))
+  var rows = 3
+  var holeWidth = canvas.width * 0.33
+  var holeHeight = canvas.height * 0.33
+  for (var i = 0; i<rows; i++) {
+    for(var j = 0; j<rows; j++) {
+      holes.push(new __WEBPACK_IMPORTED_MODULE_1_components_Hole_js__["a" /* default */](holeWidth * j, holeHeight * i, holeWidth, holeHeight, context, onHit))
+    }
+
   }
   return holes
 }
@@ -185,7 +256,7 @@ function checkHitHoles(holes, e) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Constants_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_Constants_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_Utils_js__ = __webpack_require__(5);
 
 
@@ -209,10 +280,16 @@ function Mole(xpos, ypos, width, height, context, onHit) {
   this.defaultImage = document.getElementById('diglet')
   this.currentImage = this.defaultImage
   this.imageHit = document.getElementById('diglet-hit')
-  this.animationState = __WEBPACK_IMPORTED_MODULE_0__Constants_js__["b" /* UP */]
+  this.animationState = __WEBPACK_IMPORTED_MODULE_0_Constants_js__["f" /* UP */]
   this.speed = height * 0.08
   this.sScaleFactor = (((height - this.speed) * (this.maxSHeight / height)) - this.maxSHeight) / this.speed * -1
+
+  this.init()
 }
+
+Mole.prototype.init = function () {
+  this.triggerWait(__WEBPACK_IMPORTED_MODULE_0_Constants_js__["f" /* UP */])
+};
 
 Mole.prototype.checkHit = function(layerX, layerY) {
   if (layerX > this.xpos && layerX < (this.xpos + this.width) && layerY > this.ypos && layerY < (this.ypos + this.height)) {
@@ -223,7 +300,7 @@ Mole.prototype.checkHit = function(layerX, layerY) {
 Mole.prototype.hit = function() {
   this.currentImage = this.imageHit
   this.onHit(100);
-  this.setAnimationState(__WEBPACK_IMPORTED_MODULE_0__Constants_js__["a" /* DOWN */])
+  this.setAnimationState(__WEBPACK_IMPORTED_MODULE_0_Constants_js__["a" /* DOWN */])
 }
 
 Mole.prototype.setAnimationState = function (state) {
@@ -231,9 +308,9 @@ Mole.prototype.setAnimationState = function (state) {
 }
 
 Mole.prototype.triggerWait = function (nextState) {
-  this.setAnimationState(__WEBPACK_IMPORTED_MODULE_0__Constants_js__["c" /* WAIT */])
+  this.setAnimationState(__WEBPACK_IMPORTED_MODULE_0_Constants_js__["g" /* WAIT */])
   var min = 0, max = 1000
-  if(nextState === __WEBPACK_IMPORTED_MODULE_0__Constants_js__["b" /* UP */]) {
+  if(nextState === __WEBPACK_IMPORTED_MODULE_0_Constants_js__["f" /* UP */]) {
     min = 1000, max = 5000
   }
   setTimeout(this.setAnimationState.bind(this, nextState), Object(__WEBPACK_IMPORTED_MODULE_1_Utils_js__["a" /* getRandomIntInclusive */])(min, max))
@@ -247,20 +324,20 @@ Mole.prototype.resetPos = function () {
 }
 
 Mole.prototype.update = function() {
-  if(this.animationState === __WEBPACK_IMPORTED_MODULE_0__Constants_js__["b" /* UP */]) {
+  if(this.animationState === __WEBPACK_IMPORTED_MODULE_0_Constants_js__["f" /* UP */]) {
     this.sHeight += this.speed * this.sScaleFactor
     this.height += this.speed
     this.ypos -= this.speed
     if(this.sHeight >= this.maxSHeight && this.height >= this.maxHeight) {
-      this.triggerWait(__WEBPACK_IMPORTED_MODULE_0__Constants_js__["a" /* DOWN */])
+      this.triggerWait(__WEBPACK_IMPORTED_MODULE_0_Constants_js__["a" /* DOWN */])
     }
-  } else if(this.animationState === __WEBPACK_IMPORTED_MODULE_0__Constants_js__["a" /* DOWN */]) {
+  } else if(this.animationState === __WEBPACK_IMPORTED_MODULE_0_Constants_js__["a" /* DOWN */]) {
     this.sHeight -= this.speed * this.sScaleFactor
     this.height -= this.speed
     this.ypos += this.speed
     if(this.sHeight <= this.minSHeight && this.height <= this.minHeight) {
       this.resetPos()
-      this.triggerWait(__WEBPACK_IMPORTED_MODULE_0__Constants_js__["b" /* UP */])
+      this.triggerWait(__WEBPACK_IMPORTED_MODULE_0_Constants_js__["f" /* UP */])
     }
   }
   this.context.drawImage(this.currentImage, 0, 0, this.sWidth, this.sHeight, this.xpos, this.ypos, this.width, this.height)
@@ -270,19 +347,7 @@ Mole.prototype.update = function() {
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return UP; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DOWN; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return WAIT; });
-var UP = 'UP'
-var DOWN = 'DOWN'
-var WAIT = 'WAIT'
-
-
-/***/ }),
+/* 4 */,
 /* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -308,14 +373,13 @@ function Hole(xpos, ypos, width, height, context, onHit) {
   this.ypos = ypos
   this.width = width
   this.height = height
-  this.color = '#00a96d'
   this.context = context
   this.onHit = onHit
   this.image = document.getElementById('hole')
   this.holeWidth = Math.round(this.width * 0.75)
   this.holeHeight = Math.round(298 * this.holeWidth / 956)
   this.holeXPos = this.xpos + Math.round((this.width - this.holeWidth) * 0.5)
-  this.holeYPos = this.xpos + Math.round((this.height - this.holeHeight) * 0.25) * 3
+  this.holeYPos = this.ypos + Math.round((this.height - this.holeHeight) * 0.25) * 3
 
   this.moleWidth = Math.round(this.holeWidth * 0.49)
   this.moleHeight = this.moleWidth
@@ -329,13 +393,33 @@ Hole.prototype.checkHit = function(e) {
 }
 
 Hole.prototype.update = function() {
-  this.context.fillStyle = this.color
-  this.context.fillRect(this.xpos, this.ypos, this.width, this.height)
   this.mole.update()
   this.context.drawImage(this.image, this.holeXPos, this.holeYPos, this.holeWidth, this.holeHeight)
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Hole);
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return PLAY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return PAUSE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return MENU; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return SCORE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return UP; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DOWN; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return WAIT; });
+var PLAY = 'PLAY'
+var PAUSE = 'PAUSE'
+var MENU = 'MENU'
+var SCORE = 'SCORE'
+
+var UP = 'UP'
+var DOWN = 'DOWN'
+var WAIT = 'WAIT'
 
 
 /***/ })

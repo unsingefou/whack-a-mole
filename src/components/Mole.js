@@ -1,4 +1,4 @@
-import {UP, DOWN, WAIT} from './Constants.js'
+import {UP, DOWN, WAIT} from 'Constants.js'
 import {getRandomIntInclusive} from 'Utils.js'
 
 function Mole(xpos, ypos, width, height, context, onHit) {
@@ -23,7 +23,13 @@ function Mole(xpos, ypos, width, height, context, onHit) {
   this.animationState = UP
   this.speed = height * 0.08
   this.sScaleFactor = (((height - this.speed) * (this.maxSHeight / height)) - this.maxSHeight) / this.speed * -1
+
+  this.init()
 }
+
+Mole.prototype.init = function () {
+  this.triggerWait(UP)
+};
 
 Mole.prototype.checkHit = function(layerX, layerY) {
   if (layerX > this.xpos && layerX < (this.xpos + this.width) && layerY > this.ypos && layerY < (this.ypos + this.height)) {

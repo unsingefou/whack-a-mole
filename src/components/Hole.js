@@ -14,10 +14,10 @@ function Hole(xpos, ypos, width, height, context, onHit) {
   this.holeXPos = this.xpos + Math.round((this.width - this.holeWidth) * 0.5)
   this.holeYPos = this.xpos + Math.round((this.height - this.holeHeight) * 0.25) * 3
 
-  this.moleWidth = Math.round(this.holeWidth * 0.5)
+  this.moleWidth = Math.round(this.holeWidth * 0.49)
   this.moleHeight = this.moleWidth
   this.moleXpos = this.xpos + Math.round((this.width - this.moleWidth) * 0.5)
-  this.moleYpos = this.holeYPos + 20
+  this.moleYpos = this.holeYPos + this.holeHeight * 0.5
   this.mole = new Mole(this.moleXpos, this.moleYpos, this.moleWidth, this.moleHeight, context, onHit)
 }
 

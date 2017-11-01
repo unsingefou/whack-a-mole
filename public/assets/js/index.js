@@ -200,7 +200,7 @@ function Mole(xpos, ypos, width, height, context, onHit) {
   this.height = 0
   this.sWidth = 500
   this.sHeight = 0
-  this.maxHeight = width
+  this.maxHeight = height
   this.maxSHeight = 500
   this.minHeight = 0
   this.minSHeight = 0
@@ -210,7 +210,8 @@ function Mole(xpos, ypos, width, height, context, onHit) {
   this.currentImage = this.defaultImage
   this.imageHit = document.getElementById('diglet-hit')
   this.animationState = __WEBPACK_IMPORTED_MODULE_0__Constants_js__["b" /* UP */]
-  this.speed = 4
+  this.speed = height * 0.08
+  this.sScaleFactor = (((height - this.speed) * (this.maxSHeight / height)) - this.maxSHeight) / this.speed * -1
 }
 
 Mole.prototype.checkHit = function(layerX, layerY) {
@@ -231,7 +232,7 @@ Mole.prototype.setAnimationState = function (state) {
 
 Mole.prototype.triggerWait = function (nextState) {
   this.setAnimationState(__WEBPACK_IMPORTED_MODULE_0__Constants_js__["c" /* WAIT */])
-  var min = 0, max = 500
+  var min = 0, max = 1000
   if(nextState === __WEBPACK_IMPORTED_MODULE_0__Constants_js__["b" /* UP */]) {
     min = 1000, max = 5000
   }
@@ -247,14 +248,14 @@ Mole.prototype.resetPos = function () {
 
 Mole.prototype.update = function() {
   if(this.animationState === __WEBPACK_IMPORTED_MODULE_0__Constants_js__["b" /* UP */]) {
-    this.sHeight += this.speed * 10
+    this.sHeight += this.speed * this.sScaleFactor
     this.height += this.speed
     this.ypos -= this.speed
     if(this.sHeight >= this.maxSHeight && this.height >= this.maxHeight) {
       this.triggerWait(__WEBPACK_IMPORTED_MODULE_0__Constants_js__["a" /* DOWN */])
     }
   } else if(this.animationState === __WEBPACK_IMPORTED_MODULE_0__Constants_js__["a" /* DOWN */]) {
-    this.sHeight -= this.speed * 10
+    this.sHeight -= this.speed * this.sScaleFactor
     this.height -= this.speed
     this.ypos += this.speed
     if(this.sHeight <= this.minSHeight && this.height <= this.minHeight) {
@@ -316,10 +317,10 @@ function Hole(xpos, ypos, width, height, context, onHit) {
   this.holeXPos = this.xpos + Math.round((this.width - this.holeWidth) * 0.5)
   this.holeYPos = this.xpos + Math.round((this.height - this.holeHeight) * 0.25) * 3
 
-  this.moleWidth = Math.round(this.holeWidth * 0.5)
+  this.moleWidth = Math.round(this.holeWidth * 0.49)
   this.moleHeight = this.moleWidth
   this.moleXpos = this.xpos + Math.round((this.width - this.moleWidth) * 0.5)
-  this.moleYpos = this.holeYPos + 20
+  this.moleYpos = this.holeYPos + this.holeHeight * 0.5
   this.mole = new __WEBPACK_IMPORTED_MODULE_0_components_Mole_js__["a" /* default */](this.moleXpos, this.moleYpos, this.moleWidth, this.moleHeight, context, onHit)
 }
 

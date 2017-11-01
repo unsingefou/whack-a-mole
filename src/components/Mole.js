@@ -11,7 +11,7 @@ function Mole(xpos, ypos, width, height, context, onHit) {
   this.height = 0
   this.sWidth = 500
   this.sHeight = 0
-  this.maxHeight = width
+  this.maxHeight = height
   this.maxSHeight = 500
   this.minHeight = 0
   this.minSHeight = 0
@@ -21,7 +21,8 @@ function Mole(xpos, ypos, width, height, context, onHit) {
   this.currentImage = this.defaultImage
   this.imageHit = document.getElementById('diglet-hit')
   this.animationState = UP
-  this.speed = 4
+  this.speed = height * 0.08
+  this.sScaleFactor = (((height - this.speed) * (this.maxSHeight / height)) - this.maxSHeight) / this.speed * -1
 }
 
 Mole.prototype.checkHit = function(layerX, layerY) {
@@ -42,7 +43,7 @@ Mole.prototype.setAnimationState = function (state) {
 
 Mole.prototype.triggerWait = function (nextState) {
   this.setAnimationState(WAIT)
-  var min = 0, max = 500
+  var min = 0, max = 1000
   if(nextState === UP) {
     min = 1000, max = 5000
   }
@@ -58,14 +59,14 @@ Mole.prototype.resetPos = function () {
 
 Mole.prototype.update = function() {
   if(this.animationState === UP) {
-    this.sHeight += this.speed * 10
+    this.sHeight += this.speed * this.sScaleFactor
     this.height += this.speed
     this.ypos -= this.speed
     if(this.sHeight >= this.maxSHeight && this.height >= this.maxHeight) {
       this.triggerWait(DOWN)
     }
   } else if(this.animationState === DOWN) {
-    this.sHeight -= this.speed * 10
+    this.sHeight -= this.speed * this.sScaleFactor
     this.height -= this.speed
     this.ypos += this.speed
     if(this.sHeight <= this.minSHeight && this.height <= this.minHeight) {

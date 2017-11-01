@@ -63,7 +63,8 @@ Mole.prototype.resetPos = function () {
   this.currentImage = this.defaultImage
 }
 
-Mole.prototype.update = function() {
+//Render the mole
+Mole.prototype.render = function() {
   if(this.animationState === UP) {
     this.sHeight += this.speed * this.sScaleFactor
     this.height += this.speed

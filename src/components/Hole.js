@@ -24,8 +24,9 @@ Hole.prototype.checkHit = function(e) {
   this.mole.checkHit(e.layerX, e.layerY)
 }
 
-Hole.prototype.update = function() {
-  this.mole.update()
+//Render this hole and the call the child mole
+Hole.prototype.render = function() {
+  this.mole.render()
   this.context.drawImage(this.image, this.holeXPos, this.holeYPos, this.holeWidth, this.holeHeight)
 }
 

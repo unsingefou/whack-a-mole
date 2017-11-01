@@ -159,7 +159,7 @@ Canvas.prototype.init = function () {
   this.score = 0
 }
 
-Canvas.prototype.update = function (timer, state){
+Canvas.prototype.render = function (timer, state){
   this.state = state
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
   this.ctx.fillStyle = this.color
@@ -206,7 +206,7 @@ function initHoles(canvas, context, onHit) {
 
 function updateHoles(holes) {
   holes.forEach(function(hole){
-    hole.update()
+    hole.render()
   });
 }
 
@@ -251,8 +251,9 @@ Hole.prototype.checkHit = function(e) {
   this.mole.checkHit(e.layerX, e.layerY)
 }
 
-Hole.prototype.update = function() {
-  this.mole.update()
+//Render this hole and the call the child mole
+Hole.prototype.render = function() {
+  this.mole.render()
   this.context.drawImage(this.image, this.holeXPos, this.holeYPos, this.holeWidth, this.holeHeight)
 }
 
@@ -331,7 +332,8 @@ Mole.prototype.resetPos = function () {
   this.currentImage = this.defaultImage
 }
 
-Mole.prototype.update = function() {
+//Render the mole
+Mole.prototype.render = function() {
   if(this.animationState === __WEBPACK_IMPORTED_MODULE_0_Constants_js__["f" /* UP */]) {
     this.sHeight += this.speed * this.sScaleFactor
     this.height += this.speed
@@ -410,13 +412,14 @@ Game.prototype.reset = function() {
   this.score = 0
 }
 
+//This is the update loop, draw to canvas depending on the state
 Game.prototype.update = function () {
   if(this.state === __WEBPACK_IMPORTED_MODULE_1_Constants_js__["b" /* MENU */]) {
     this.canvas.renderMenu()
   } else if(this.state === __WEBPACK_IMPORTED_MODULE_1_Constants_js__["d" /* PLAY */]) {
     if(this.timer > 0) {
       if(this.state === __WEBPACK_IMPORTED_MODULE_1_Constants_js__["d" /* PLAY */] ) {
-        this.canvas.update(this.timer)
+        this.canvas.render(this.timer)
         this.timer -= this.interval
       }
     } else {

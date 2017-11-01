@@ -22,7 +22,7 @@ Canvas.prototype.init = function () {
   this.score = 0
 }
 
-Canvas.prototype.update = function (timer, state){
+Canvas.prototype.render = function (timer, state){
   this.state = state
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
   this.ctx.fillStyle = this.color
@@ -69,7 +69,7 @@ function initHoles(canvas, context, onHit) {
 
 function updateHoles(holes) {
   holes.forEach(function(hole){
-    hole.update()
+    hole.render()
   });
 }
 

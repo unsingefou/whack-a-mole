@@ -19,13 +19,14 @@ Game.prototype.reset = function() {
   this.score = 0
 }
 
+//This is the update loop, draw to canvas depending on the state
 Game.prototype.update = function () {
   if(this.state === MENU) {
     this.canvas.renderMenu()
   } else if(this.state === PLAY) {
     if(this.timer > 0) {
       if(this.state === PLAY ) {
-        this.canvas.update(this.timer)
+        this.canvas.render(this.timer)
         this.timer -= this.interval
       }
     } else {

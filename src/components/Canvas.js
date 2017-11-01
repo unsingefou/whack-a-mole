@@ -1,4 +1,3 @@
-import Mole from 'components/Mole.js'
 import Hole from 'components/Hole.js'
 
 function Canvas() {
@@ -62,7 +61,6 @@ function initHoles(canvas, context, onHit) {
     for(var j = 0; j<rows; j++) {
       holes.push(new Hole(holeWidth * j, holeHeight * i, holeWidth, holeHeight, context, onHit))
     }
-
   }
   return holes
 }

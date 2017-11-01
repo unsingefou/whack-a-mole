@@ -165,9 +165,7 @@ Game.prototype.getState = function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_components_Mole_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_components_Hole_js__ = __webpack_require__(6);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_components_Hole_js__ = __webpack_require__(6);
 
 
 function Canvas() {
@@ -229,9 +227,8 @@ function initHoles(canvas, context, onHit) {
   var holeHeight = canvas.height * 0.33
   for (var i = 0; i<rows; i++) {
     for(var j = 0; j<rows; j++) {
-      holes.push(new __WEBPACK_IMPORTED_MODULE_1_components_Hole_js__["a" /* default */](holeWidth * j, holeHeight * i, holeWidth, holeHeight, context, onHit))
+      holes.push(new __WEBPACK_IMPORTED_MODULE_0_components_Hole_js__["a" /* default */](holeWidth * j, holeHeight * i, holeWidth, holeHeight, context, onHit))
     }
-
   }
   return holes
 }

@@ -3,16 +3,21 @@
   <head>
     <title>Whack-a-Mole</title>
     <script src="assets/js/index.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/index.css">
   </head>
   <body>
-    <canvas id="canvas" width="800" height="800" style="background-color: #efefef"></canvas>
-    <button id='start'>Play</button>
-    <button id='stop'>Pause</button>
-    <button id='reset'>Reset</button>
-    <img id='menu' src='assets/images/menu.png' style='display: none'/>
-    <img id='score' src='assets/images/score.png' style='display: none'/>
-    <img id='diglet' src='assets/images/diglett.png' style='display: none'/>
-    <img id='diglet-hit' src='assets/images/diglett-hit.png' style='display: none'/>
-    <img id='hole' src='assets/images/hole.png' style='display: none'/>
+    <div class='canvas-wrapper'>
+      <canvas id="canvas" width="800" height="800" style="background-color: #efefef"></canvas>
+    </div>
+    <div class='button-wrapper'>
+      <button id='start'>Play</button>
+      <button id='stop'>Pause</button>
+      <button id='reset'>Reset</button>
+    </div>
+    <img id='menu' src='assets/images/menu.png'/>
+    <img id='score' src='assets/images/score.png'/>
+    <img id='diglet' src='assets/images/diglett.png'/>
+    <img id='diglet-hit' src='assets/images/diglett-hit.png'/>
+    <img id='hole' src='assets/images/hole.png'/>
   </body>
 </html>

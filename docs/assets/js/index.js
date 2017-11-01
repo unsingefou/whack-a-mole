@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -68,9 +68,31 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return PLAY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return PAUSE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return MENU; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return SCORE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return UP; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DOWN; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return WAIT; });
+var PLAY = 'PLAY'
+var PAUSE = 'PAUSE'
+var MENU = 'MENU'
+var SCORE = 'SCORE'
+
+var UP = 'UP'
+var DOWN = 'DOWN'
+var WAIT = 'WAIT'
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Game_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_Constants_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Game_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_Constants_js__ = __webpack_require__(0);
 
 
 
@@ -117,12 +139,12 @@ function resizeCanvas() {
 
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_components_Canvas_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_Constants_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_components_Canvas_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_Constants_js__ = __webpack_require__(0);
 
 
 
@@ -175,12 +197,12 @@ Game.prototype.getState = function () {
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_components_Hole_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_Constants_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_components_Hole_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_Constants_js__ = __webpack_require__(0);
 
 
 
@@ -266,12 +288,52 @@ function checkHitHoles(holes, e) {
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_Constants_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_Utils_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_components_Mole_js__ = __webpack_require__(5);
+
+
+function Hole(xpos, ypos, width, height, context, onHit) {
+  this.xpos = xpos
+  this.ypos = ypos
+  this.width = width
+  this.height = height
+  this.context = context
+  this.onHit = onHit
+  this.image = document.getElementById('hole')
+  this.holeWidth = Math.round(this.width * 0.75)
+  this.holeHeight = Math.round(298 * this.holeWidth / 956)
+  this.holeXPos = this.xpos + Math.round((this.width - this.holeWidth) * 0.5)
+  this.holeYPos = this.ypos + Math.round((this.height - this.holeHeight) * 0.25) * 3
+
+  this.moleWidth = Math.round(this.holeWidth * 0.49)
+  this.moleHeight = this.moleWidth
+  this.moleXpos = this.xpos + Math.round((this.width - this.moleWidth) * 0.5)
+  this.moleYpos = this.holeYPos + this.holeHeight * 0.5
+  this.mole = new __WEBPACK_IMPORTED_MODULE_0_components_Mole_js__["a" /* default */](this.moleXpos, this.moleYpos, this.moleWidth, this.moleHeight, context, onHit)
+}
+
+Hole.prototype.checkHit = function(e) {
+  this.mole.checkHit(e.layerX, e.layerY)
+}
+
+Hole.prototype.update = function() {
+  this.mole.update()
+  this.context.drawImage(this.image, this.holeXPos, this.holeYPos, this.holeWidth, this.holeHeight)
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Hole);
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_Constants_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_Utils_js__ = __webpack_require__(6);
 
 
 
@@ -361,8 +423,7 @@ Mole.prototype.update = function() {
 
 
 /***/ }),
-/* 4 */,
-/* 5 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -372,68 +433,6 @@ function getRandomIntInclusive(min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_components_Mole_js__ = __webpack_require__(3);
-
-
-function Hole(xpos, ypos, width, height, context, onHit) {
-  this.xpos = xpos
-  this.ypos = ypos
-  this.width = width
-  this.height = height
-  this.context = context
-  this.onHit = onHit
-  this.image = document.getElementById('hole')
-  this.holeWidth = Math.round(this.width * 0.75)
-  this.holeHeight = Math.round(298 * this.holeWidth / 956)
-  this.holeXPos = this.xpos + Math.round((this.width - this.holeWidth) * 0.5)
-  this.holeYPos = this.ypos + Math.round((this.height - this.holeHeight) * 0.25) * 3
-
-  this.moleWidth = Math.round(this.holeWidth * 0.49)
-  this.moleHeight = this.moleWidth
-  this.moleXpos = this.xpos + Math.round((this.width - this.moleWidth) * 0.5)
-  this.moleYpos = this.holeYPos + this.holeHeight * 0.5
-  this.mole = new __WEBPACK_IMPORTED_MODULE_0_components_Mole_js__["a" /* default */](this.moleXpos, this.moleYpos, this.moleWidth, this.moleHeight, context, onHit)
-}
-
-Hole.prototype.checkHit = function(e) {
-  this.mole.checkHit(e.layerX, e.layerY)
-}
-
-Hole.prototype.update = function() {
-  this.mole.update()
-  this.context.drawImage(this.image, this.holeXPos, this.holeYPos, this.holeWidth, this.holeHeight)
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Hole);
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return PLAY; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return PAUSE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return MENU; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return SCORE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return UP; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DOWN; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return WAIT; });
-var PLAY = 'PLAY'
-var PAUSE = 'PAUSE'
-var MENU = 'MENU'
-var SCORE = 'SCORE'
-
-var UP = 'UP'
-var DOWN = 'DOWN'
-var WAIT = 'WAIT'
 
 
 /***/ })

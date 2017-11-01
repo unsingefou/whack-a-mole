@@ -1,4 +1,4 @@
-import Game from './Game.js'
+import Game from 'components/Game.js'
 import {resizeCanvas} from './Utils.js'
 import {PLAY, PAUSE, MENU, SCORE} from 'Constants.js'
 

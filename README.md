@@ -12,3 +12,7 @@ NOTE the entry point is 'src/index.js'
 
 Optionally, for the dev environment, it is advantageous to have webpack watch and recompile any changes.
 Use the command 'npm run watch'
+
+# Supported Browsers
+Chrome
+Safari

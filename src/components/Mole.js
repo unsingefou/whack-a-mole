@@ -33,6 +33,7 @@ Mole.prototype.checkHit = function(layerX, layerY) {
 Mole.prototype.hit = function() {
   this.currentImage = this.imageHit
   console.log(this.currentImage)
+  this.onHit(100);
   this.setAnimationState(DOWN)
 }
 

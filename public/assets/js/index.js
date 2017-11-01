@@ -138,7 +138,10 @@ function Canvas() {
   this.isMouseDown = false
   this.canvas.onmousedown = this.mouseDown.bind(this)
   this.canvas.onmouseup = this.mouseUp.bind(this)
-  this.moles = initMoles(this.canvas, this.ctx)
+  this.updateScore = this.updateScore.bind(this)
+  this.moles = initMoles(this.canvas, this.ctx, this.updateScore)
+  this.score = 0;
+
 }
 
 Canvas.prototype.update = function (){
@@ -157,10 +160,15 @@ Canvas.prototype.mouseUp = function(e) {
   console.log("mouse up!")
 }
 
-function initMoles(canvas, context) {
+Canvas.prototype.updateScore = function(value) {
+  this.score += value
+  console.log(this.score);
+}
+
+function initMoles(canvas, context, onHit) {
   var moles = []
   for (var i = 0; i<1; i++) {
-    moles.push(new __WEBPACK_IMPORTED_MODULE_0_components_Mole_js__["a" /* default */](canvas.width * 0.5 - 20 * i, canvas.height * 0.5 - 20 * i, context))
+    moles.push(new __WEBPACK_IMPORTED_MODULE_0_components_Mole_js__["a" /* default */](canvas.width * 0.5 - 20 * i, canvas.height * 0.5 - 20 * i, context, onHit))
   }
   return moles
 }
@@ -223,6 +231,7 @@ Mole.prototype.checkHit = function(layerX, layerY) {
 Mole.prototype.hit = function() {
   this.currentImage = this.imageHit
   console.log(this.currentImage)
+  this.onHit(100);
   this.setAnimationState(__WEBPACK_IMPORTED_MODULE_0__Constants_js__["a" /* DOWN */])
 }
 

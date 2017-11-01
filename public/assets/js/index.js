@@ -130,34 +130,26 @@ Game.prototype.setPlaying = function (val) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_components_Mole_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_components_Hole_js__ = __webpack_require__(6);
+
 
 
 function Canvas() {
   this.canvas = document.getElementById("canvas")
   this.ctx = this.canvas.getContext("2d")
-  this.isMouseDown = false
-  this.canvas.onmousedown = this.mouseDown.bind(this)
   this.canvas.onmouseup = this.mouseUp.bind(this)
   this.updateScore = this.updateScore.bind(this)
-  this.moles = initMoles(this.canvas, this.ctx, this.updateScore)
-  this.score = 0;
-
+  this.holes = initHoles(this.canvas, this.ctx, this.updateScore)
+  this.score = 0
 }
 
 Canvas.prototype.update = function (){
   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-  updateMoles(this.moles)
-}
-
-Canvas.prototype.mouseDown = function(e) {
-  this.isMouseDown = true
-  console.log("mouse down!")
+  updateHoles(this.holes)
 }
 
 Canvas.prototype.mouseUp = function(e) {
-  checkHitMoles(this.moles, e)
-  this.isMouseDown = false
-  console.log("mouse up!")
+  checkHitHoles(this.holes, e)
 }
 
 Canvas.prototype.updateScore = function(value) {
@@ -165,24 +157,23 @@ Canvas.prototype.updateScore = function(value) {
   console.log(this.score);
 }
 
-function initMoles(canvas, context, onHit) {
-  var moles = []
+function initHoles(canvas, context, onHit) {
+  var holes = []
   for (var i = 0; i<1; i++) {
-    moles.push(new __WEBPACK_IMPORTED_MODULE_0_components_Mole_js__["a" /* default */](canvas.width * 0.5 - 20 * i, canvas.height * 0.5 - 20 * i, context, onHit))
+    holes.push(new __WEBPACK_IMPORTED_MODULE_1_components_Hole_js__["a" /* default */](canvas.width * 0.5, canvas.height * 0.5, canvas.width * 0.5, canvas.height * 0.5, context, onHit))
   }
-  return moles
+  return holes
 }
 
-function updateMoles(moles) {
-  moles.forEach(function(mole){
-    mole.update()
+function updateHoles(holes) {
+  holes.forEach(function(hole){
+    hole.update()
   });
 }
 
-function checkHitMoles(moles, e) {
-  console.log(e)
-  moles.forEach(function(mole){
-    mole.checkHit(e.layerX, e.layerY)
+function checkHitHoles(holes, e) {
+  holes.forEach(function(hole){
+    hole.checkHit(e)
   });
 }
 
@@ -199,17 +190,17 @@ function checkHitMoles(moles, e) {
 
 
 
-function Mole(xpos, ypos, context, onHit) {
+function Mole(xpos, ypos, width, height, context, onHit) {
   this.xpos = xpos
   this.ypos = ypos
   this.context = context
   this.originX = xpos
   this.originY = ypos
-  this.width = 50
+  this.width = width
   this.height = 0
   this.sWidth = 500
   this.sHeight = 0
-  this.maxHeight = 50
+  this.maxHeight = width
   this.maxSHeight = 500
   this.minHeight = 0
   this.minSHeight = 0
@@ -230,7 +221,6 @@ Mole.prototype.checkHit = function(layerX, layerY) {
 
 Mole.prototype.hit = function() {
   this.currentImage = this.imageHit
-  console.log(this.currentImage)
   this.onHit(100);
   this.setAnimationState(__WEBPACK_IMPORTED_MODULE_0__Constants_js__["a" /* DOWN */])
 }
@@ -272,7 +262,7 @@ Mole.prototype.update = function() {
       this.triggerWait(__WEBPACK_IMPORTED_MODULE_0__Constants_js__["b" /* UP */])
     }
   }
-  this.context.drawImage(this.currentImage, 0, 0, 500, this.sHeight, this.xpos, this.ypos, this.width, this.height)
+  this.context.drawImage(this.currentImage, 0, 0, this.sWidth, this.sHeight, this.xpos, this.ypos, this.width, this.height)
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Mole);
@@ -302,6 +292,49 @@ function getRandomIntInclusive(min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_components_Mole_js__ = __webpack_require__(3);
+
+
+function Hole(xpos, ypos, width, height, context, onHit) {
+  this.xpos = xpos
+  this.ypos = ypos
+  this.width = width
+  this.height = height
+  this.color = '#00a96d'
+  this.context = context
+  this.onHit = onHit
+  this.image = document.getElementById('hole')
+  this.holeWidth = Math.round(this.width * 0.75)
+  this.holeHeight = Math.round(298 * this.holeWidth / 956)
+  this.holeXPos = this.xpos + Math.round((this.width - this.holeWidth) * 0.5)
+  this.holeYPos = this.xpos + Math.round((this.height - this.holeHeight) * 0.25) * 3
+
+  this.moleWidth = Math.round(this.holeWidth * 0.5)
+  this.moleHeight = this.moleWidth
+  this.moleXpos = this.xpos + Math.round((this.width - this.moleWidth) * 0.5)
+  this.moleYpos = this.holeYPos + 20
+  this.mole = new __WEBPACK_IMPORTED_MODULE_0_components_Mole_js__["a" /* default */](this.moleXpos, this.moleYpos, this.moleWidth, this.moleHeight, context, onHit)
+}
+
+Hole.prototype.checkHit = function(e) {
+  this.mole.checkHit(e.layerX, e.layerY)
+}
+
+Hole.prototype.update = function() {
+  this.context.fillStyle = this.color
+  this.context.fillRect(this.xpos, this.ypos, this.width, this.height)
+  this.mole.update()
+  this.context.drawImage(this.image, this.holeXPos, this.holeYPos, this.holeWidth, this.holeHeight)
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Hole);
 
 
 /***/ })

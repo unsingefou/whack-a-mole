@@ -1,17 +1,17 @@
 import {UP, DOWN, WAIT} from './Constants.js'
 import {getRandomIntInclusive} from 'Utils.js'
 
-function Mole(xpos, ypos, context, onHit) {
+function Mole(xpos, ypos, width, height, context, onHit) {
   this.xpos = xpos
   this.ypos = ypos
   this.context = context
   this.originX = xpos
   this.originY = ypos
-  this.width = 50
+  this.width = width
   this.height = 0
   this.sWidth = 500
   this.sHeight = 0
-  this.maxHeight = 50
+  this.maxHeight = width
   this.maxSHeight = 500
   this.minHeight = 0
   this.minSHeight = 0
@@ -32,7 +32,6 @@ Mole.prototype.checkHit = function(layerX, layerY) {
 
 Mole.prototype.hit = function() {
   this.currentImage = this.imageHit
-  console.log(this.currentImage)
   this.onHit(100);
   this.setAnimationState(DOWN)
 }
@@ -74,7 +73,7 @@ Mole.prototype.update = function() {
       this.triggerWait(UP)
     }
   }
-  this.context.drawImage(this.currentImage, 0, 0, 500, this.sHeight, this.xpos, this.ypos, this.width, this.height)
+  this.context.drawImage(this.currentImage, 0, 0, this.sWidth, this.sHeight, this.xpos, this.ypos, this.width, this.height)
 }
 
 export default Mole

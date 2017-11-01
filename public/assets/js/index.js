@@ -207,7 +207,9 @@ function Mole(xpos, ypos, context, onHit) {
   this.minSHeight = 0
   this.selected = false
   this.onHit = onHit
-  this.image = document.getElementById('diglet')
+  this.defaultImage = document.getElementById('diglet')
+  this.currentImage = this.defaultImage
+  this.imageHit = document.getElementById('diglet-hit')
   this.animationState = __WEBPACK_IMPORTED_MODULE_0__Constants_js__["b" /* UP */]
   this.speed = 4
 }
@@ -219,7 +221,8 @@ Mole.prototype.checkHit = function(layerX, layerY) {
 }
 
 Mole.prototype.hit = function() {
-  console.log("hit!")
+  this.currentImage = this.imageHit
+  console.log(this.currentImage)
   this.setAnimationState(__WEBPACK_IMPORTED_MODULE_0__Constants_js__["a" /* DOWN */])
 }
 
@@ -240,6 +243,7 @@ Mole.prototype.resetPos = function () {
   this.ypos = this.originY
   this.sHeighth = this.minSHeight
   this.height = this.minHeight
+  this.currentImage = this.defaultImage
 }
 
 Mole.prototype.update = function() {
@@ -259,8 +263,7 @@ Mole.prototype.update = function() {
       this.triggerWait(__WEBPACK_IMPORTED_MODULE_0__Constants_js__["b" /* UP */])
     }
   }
-  //ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-  this.context.drawImage(this.image, 0, 0, 500, this.sHeight, this.xpos, this.ypos, this.width, this.height)
+  this.context.drawImage(this.currentImage, 0, 0, 500, this.sHeight, this.xpos, this.ypos, this.width, this.height)
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Mole);

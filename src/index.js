@@ -1,4 +1,5 @@
 import Game from './Game.js'
+import {resizeCanvas} from './Utils.js'
 import {PLAY, PAUSE, MENU, SCORE} from 'Constants.js'
 
 document.addEventListener( 'DOMContentLoaded', function () {
@@ -28,16 +29,3 @@ document.addEventListener( 'DOMContentLoaded', function () {
   }, false)
 
 }, false )
-
-function resizeCanvas() {
-  var viewPort = window.innerWidth
-  var canvas = document.getElementById('canvas')
-  var width = 700
-  if(viewPort <= 425) {
-    width = 375
-  } else if(viewPort <= 768) {
-    width = 500
-  }
-  canvas.width = width
-  canvas.height = width
-}

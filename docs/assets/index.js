@@ -92,50 +92,39 @@ var WAIT = 'WAIT'
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Game_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_Constants_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Utils_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_Constants_js__ = __webpack_require__(0);
+
 
 
 
 document.addEventListener( 'DOMContentLoaded', function () {
-  resizeCanvas()
+  Object(__WEBPACK_IMPORTED_MODULE_1__Utils_js__["b" /* resizeCanvas */])()
   var game = new __WEBPACK_IMPORTED_MODULE_0__Game_js__["a" /* default */]()
 
   document.getElementById('start').addEventListener('click', function() {
-    if(game.getState() === __WEBPACK_IMPORTED_MODULE_1_Constants_js__["c" /* PAUSE */]) {
-      game.setState(__WEBPACK_IMPORTED_MODULE_1_Constants_js__["d" /* PLAY */])
-    } else if(game.getState() === __WEBPACK_IMPORTED_MODULE_1_Constants_js__["b" /* MENU */]) {
-      game.setState(__WEBPACK_IMPORTED_MODULE_1_Constants_js__["d" /* PLAY */])
-    } else if(game.getState() === __WEBPACK_IMPORTED_MODULE_1_Constants_js__["e" /* SCORE */]) {
+    if(game.getState() === __WEBPACK_IMPORTED_MODULE_2_Constants_js__["c" /* PAUSE */]) {
+      game.setState(__WEBPACK_IMPORTED_MODULE_2_Constants_js__["d" /* PLAY */])
+    } else if(game.getState() === __WEBPACK_IMPORTED_MODULE_2_Constants_js__["b" /* MENU */]) {
+      game.setState(__WEBPACK_IMPORTED_MODULE_2_Constants_js__["d" /* PLAY */])
+    } else if(game.getState() === __WEBPACK_IMPORTED_MODULE_2_Constants_js__["e" /* SCORE */]) {
       game.reset()
     }
   }, false)
 
   document.getElementById('stop').addEventListener('click', function() {
-    if(game.getState() === __WEBPACK_IMPORTED_MODULE_1_Constants_js__["d" /* PLAY */]) {
-      game.setState(__WEBPACK_IMPORTED_MODULE_1_Constants_js__["c" /* PAUSE */])
+    if(game.getState() === __WEBPACK_IMPORTED_MODULE_2_Constants_js__["d" /* PLAY */]) {
+      game.setState(__WEBPACK_IMPORTED_MODULE_2_Constants_js__["c" /* PAUSE */])
     }
   }, false)
 
   document.getElementById('reset').addEventListener('click', function() {
-    if(game.getState() !== __WEBPACK_IMPORTED_MODULE_1_Constants_js__["b" /* MENU */]) {
+    if(game.getState() !== __WEBPACK_IMPORTED_MODULE_2_Constants_js__["b" /* MENU */]) {
       game.reset()
     }
   }, false)
 
 }, false )
-
-function resizeCanvas() {
-  var viewPort = window.innerWidth
-  var canvas = document.getElementById('canvas')
-  var width = 700
-  if(viewPort <= 425) {
-    width = 375
-  } else if(viewPort <= 768) {
-    width = 500
-  }
-  canvas.width = width
-  canvas.height = width
-}
 
 
 /***/ }),
@@ -428,10 +417,24 @@ Mole.prototype.update = function() {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = getRandomIntInclusive;
+/* harmony export (immutable) */ __webpack_exports__["b"] = resizeCanvas;
 function getRandomIntInclusive(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+function resizeCanvas() {
+  var viewPort = window.innerWidth
+  var canvas = document.getElementById('canvas')
+  var width = 700
+  if(viewPort <= 425) {
+    width = 375
+  } else if(viewPort <= 768) {
+    width = 500
+  }
+  canvas.width = width
+  canvas.height = width
 }
 
 
